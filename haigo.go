@@ -73,7 +73,7 @@ func sanitizeParams(params map[string]interface{}) map[string]interface{} {
 func (h *HaigoQuery) Query(params map[string]interface{}) (map[string]interface{}, error) {
 
 	// Create the template
-	t, err := template.New("what").Parse(h.QueryString)
+	t, err := template.New("haigo").Parse(h.QueryString)
 	if err != nil {
 		return nil, err
 	}
