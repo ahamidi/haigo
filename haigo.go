@@ -2,8 +2,8 @@ package haigo
 
 import (
 	"bytes"
+	"encoding/json"
 	"fmt"
-	"log"
 	"text/template"
 
 	"gopkg.in/mgo.v2/bson"
@@ -62,14 +62,15 @@ func sanitizeParams(params map[string]interface{}) map[string]interface{} {
 	for k, v := range params {
 		switch v.(type) {
 		case string:
-			params[k] = fmt.Sprintf("'%s'", v)
+			params[k] = fmt.Sprintf("\"%s\"", v)
 		}
+
 	}
 	return params
 }
 
 // Query - Accepts a params map and returns a bson.M.
-func (h *HaigoQuery) Query(params map[string]interface{}) (bson.D, error) {
+func (h *HaigoQuery) Query(params map[string]interface{}) (map[string]interface{}, error) {
 
 	// Create the template
 	t, err := template.New("what").Parse(h.QueryString)
@@ -86,22 +87,14 @@ func (h *HaigoQuery) Query(params map[string]interface{}) (bson.D, error) {
 		return nil, err
 	}
 
-	qs := QueryString(buf.String())
+	//qs := QueryString(buf.String())
 
-	qib, err := bson.Marshal(qs)
-	if err != nil {
-		return nil, err
-	}
-	log.Println("qib:", string(qib))
-
-	var b bson.D
-
-	err = bson.Unmarshal(qib, &b)
+	// Unmarshal JSON into Map
+	var m map[string]interface{}
+	err = json.Unmarshal(buf.Bytes(), &m)
 	if err != nil {
 		return nil, err
 	}
 
-	log.Println("qs:", qs)
-
-	return b, nil
+	return m, nil
 }
