@@ -87,8 +87,6 @@ func (h *HaigoQuery) Query(params map[string]interface{}) (map[string]interface{
 		return nil, err
 	}
 
-	//qs := QueryString(buf.String())
-
 	// Unmarshal JSON into Map
 	var m map[string]interface{}
 	err = json.Unmarshal(buf.Bytes(), &m)

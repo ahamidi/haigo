@@ -7,9 +7,9 @@ Haigo lets you write and use standard MongoDB queries, easily.
 
 ### TODO
 
-- [ ] Parse MongoDB Query YAML
-- [ ] Detect Queries
-- [ ] Replace Query Params
+- [x] Parse MongoDB Query YAML
+- [x] Detect Queries
+- [x] Replace Query Params
 - [ ] Tests
 - [ ] Docs
 
