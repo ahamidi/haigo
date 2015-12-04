@@ -2,7 +2,8 @@
 YeSQL for Mongo on Go
 
 ### Overview
-Haigo lets you write and use standard MongoDB queries, easily.
+Haigo lets you write and use standard MongoDB queries directly from within your
+Go application.
 
 
 ### TODO
@@ -15,12 +16,10 @@ Haigo lets you write and use standard MongoDB queries, easily.
 
 ### Design
 
-#### MongoDB query file parsing
+#### Haigo File
 
-1. Read in full file.
-1. Find all instances of `--`.
-1. Parse the `name`, use as key for Query map.
-1. Parse the query and track params (look for `:` followed by param name).
+* YAML formatted file.
+* MongoDB query as string.
 
 #### Usage
 
