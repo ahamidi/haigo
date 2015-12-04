@@ -11,6 +11,8 @@ Go application.
 - [x] Parse MongoDB Query YAML
 - [x] Detect Queries
 - [x] Replace Query Params
+- [x] Integrate CI
+- [ ] Support Bindata
 - [ ] Tests
 - [ ] Docs
 
