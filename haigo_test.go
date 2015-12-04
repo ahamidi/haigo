@@ -2,7 +2,6 @@ package haigo
 
 import (
 	"fmt"
-	"log"
 	"os"
 	"testing"
 
@@ -22,8 +21,6 @@ func TestGenerateQuery(t *testing.T) {
 	q, err := hf.Queries["basic-select"].Query(map[string]interface{}{
 		"type": "hi",
 	})
-
-	log.Println("Q:", q)
 
 	assert.NoError(t, err)
 	assert.Equal(t, "hi", q["type"])
@@ -61,7 +58,7 @@ func TestExecQuery(t *testing.T) {
 	cnt, err := res.Count()
 
 	assert.NoError(t, err)
-	assert.Equal(t, 3, cnt)
+	assert.Equal(t, 1, cnt)
 }
 
 func TestConditionalQuery(t *testing.T) {

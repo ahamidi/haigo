@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"text/template"
 
-	"gopkg.in/mgo.v2/bson"
 	"gopkg.in/yaml.v2"
 )
 
@@ -26,17 +25,6 @@ type HaigoFile struct {
 	Queries map[string]*HaigoQuery
 }
 
-type QueryString string
-
-func (qi *QueryString) bytes() []byte {
-	return []byte(string(*qi))
-}
-
-func (qi QueryString) GetBSON() (interface{}, error) {
-	br := bson.Raw{3, qi.bytes()}
-	return br, nil
-}
-
 func (m *HaigoFile) unmarshalYAML(data []byte) error {
 
 	var hqs []HaigoQuery
@@ -48,8 +36,8 @@ func (m *HaigoFile) unmarshalYAML(data []byte) error {
 
 	qm := make(map[string]*HaigoQuery)
 
-	for _, q := range hqs {
-		qm[q.Name] = &q
+	for i := range hqs {
+		qm[hqs[i].Name] = &hqs[i]
 	}
 
 	m.Queries = qm
