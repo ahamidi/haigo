@@ -1,4 +1,7 @@
-# Haigo
+[![Circle CI](https://circleci.com/gh/ahamidi/haigo.svg?style=svg)](https://circleci.com/gh/ahamidi/haigo)
+[![GoDoc](https://godoc.org/github.com/ahamidi/haigo?status.svg)](https://godoc.org/github.com/ahamidi/haigo)
+
+# Haigo 
 YeSQL-like abstraction layer for Mongo on Go
 
 ### Overview
