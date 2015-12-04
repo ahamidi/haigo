@@ -1,5 +1,5 @@
-# haigo
-YeSQL for Mongo on Go
+# Haigo
+YeSQL-like abstraction layer for Mongo on Go
 
 ### Overview
 Haigo lets you write and use standard MongoDB queries directly from within your
