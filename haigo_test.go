@@ -13,14 +13,23 @@ import (
 )
 
 func TestMain(m *testing.M) {
+
+	// Setup
 	err := seedDB()
 	if err != nil {
 		log.Println("Seed DB error:", err)
 	}
 
-	os.Exit(m.Run())
+	retCode := m.Run()
 
-	dropDB()
+	// Teardown
+	err = dropDB()
+	if err != nil {
+		log.Println("Unable to drop collection:", err)
+	}
+
+	os.Exit(retCode)
+
 }
 
 func TestParseMongoFile(t *testing.T) {
@@ -183,5 +192,5 @@ func dropDB() error {
 		dbname = "test"
 	}
 	db := sess.DB(dbname)
-	return db.DropDatabase()
+	return db.C("testcol").DropCollection()
 }
