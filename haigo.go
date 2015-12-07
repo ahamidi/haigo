@@ -84,3 +84,8 @@ func (h *HaigoQuery) Query(params map[string]interface{}) (map[string]interface{
 
 	return m, nil
 }
+
+// LoadQueryFile - Reads in Mongo Query File for use with Haigo.
+func LoadQueryFile(file string) (*HaigoFile, error) {
+	return parseMongoFile(file)
+}
