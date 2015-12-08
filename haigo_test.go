@@ -121,6 +121,41 @@ func TestConditionalQuery(t *testing.T) {
 
 }
 
+func TestExecute(t *testing.T) {
+	if testing.Short() {
+		t.Skip()
+	}
+	uri := os.Getenv("MONGO_URL")
+	if uri == "" {
+		uri = "127.0.0.1"
+	}
+
+	sess, err := mgo.Dial(uri)
+	if err != nil {
+		fmt.Printf("Can't connect to mongo, go error %v\n", err)
+		os.Exit(1)
+	}
+
+	// sess.SetSafe(&mgo.Safe{})
+	dbname := os.Getenv("MONGO_DB")
+	if dbname == "" {
+		dbname = "test"
+	}
+	col := sess.DB(dbname).C("testcol")
+
+	hf, _ := LoadQueryFile("queries.yml")
+	params := HaigoParams{
+		"type": "Good",
+	}
+	res, err := hf.Queries["basic-select"].Execute(col, params)
+
+	cnt, err := res.Count()
+
+	assert.NoError(t, err)
+	assert.Equal(t, 1, cnt)
+
+}
+
 func readSeedFile(file string) ([]interface{}, error) {
 
 	ms := []interface{}{}
