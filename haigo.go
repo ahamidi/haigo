@@ -70,7 +70,8 @@ func sanitizeParams(params HaigoParams) HaigoParams {
 	return params
 }
 
-// Query - Accepts a params map and returns a bson.M.
+// Query - Accepts a params map and returns a map for use with the mgo `find()`
+// function.
 func (h *HaigoQuery) Query(params HaigoParams) (map[string]interface{}, error) {
 
 	// Create the template
