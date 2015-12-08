@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"text/template"
 
+	"gopkg.in/mgo.v2"
 	"gopkg.in/yaml.v2"
 )
 
@@ -15,10 +16,22 @@ type Param struct {
 }
 
 type HaigoQuery struct {
-	Name        string `yaml:"name"`
-	Description string `yaml:"description,omitempty"`
-	QueryString string `yaml:"query"`
-	Params      []Param
+	Name        string  `yaml:"name"`
+	Description string  `yaml:"description,omitempty"`
+	QueryString string  `yaml:"query"`
+	Params      []Param // TODO
+}
+
+type HaigoParams map[string]interface{}
+
+func (hq *HaigoQuery) Execute(col *mgo.Collection, params HaigoParams) (*mgo.Query, error) {
+
+	q, err := hq.Query(params)
+	if err != nil {
+		return nil, err
+	}
+
+	return col.Find(q), nil
 }
 
 type HaigoFile struct {
@@ -46,7 +59,7 @@ func (m *HaigoFile) unmarshalYAML(data []byte) error {
 }
 
 // sanitizeParams - Adds single quotes if param is a string (as needed by Mongo).
-func sanitizeParams(params map[string]interface{}) map[string]interface{} {
+func sanitizeParams(params HaigoParams) HaigoParams {
 	for k, v := range params {
 		switch v.(type) {
 		case string:
@@ -58,7 +71,7 @@ func sanitizeParams(params map[string]interface{}) map[string]interface{} {
 }
 
 // Query - Accepts a params map and returns a bson.M.
-func (h *HaigoQuery) Query(params map[string]interface{}) (map[string]interface{}, error) {
+func (h *HaigoQuery) Query(params HaigoParams) (map[string]interface{}, error) {
 
 	// Create the template
 	t, err := template.New("haigo").Parse(h.QueryString)
