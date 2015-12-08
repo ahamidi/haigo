@@ -37,7 +37,7 @@ func (h *HaigoQuery) Execute(col *mgo.Collection, params HaigoParams) (*mgo.Quer
 
 // HaigoFile - YAML formatted file with MongoDB Queries.
 //
-//	---
+// ---
 //    - name: basic-select
 //      description: Basic MongoDB Select
 //      query: '{"type": {{.type}} }'
