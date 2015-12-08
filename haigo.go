@@ -10,7 +10,7 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
-type Param struct {
+type param struct {
 	Name string
 	Type string
 }
@@ -19,7 +19,7 @@ type HaigoQuery struct {
 	Name        string  `yaml:"name"`
 	Description string  `yaml:"description,omitempty"`
 	QueryString string  `yaml:"query"`
-	Params      []Param // TODO
+	params      []param // TODO
 }
 
 type HaigoParams map[string]interface{}
