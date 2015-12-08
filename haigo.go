@@ -24,6 +24,7 @@ type HaigoQuery struct {
 
 type HaigoParams map[string]interface{}
 
+// Execute - Returns configured mgo Query.
 func (h *HaigoQuery) Execute(col *mgo.Collection, params HaigoParams) (*mgo.Query, error) {
 
 	q, err := h.Query(params)
@@ -34,6 +35,19 @@ func (h *HaigoQuery) Execute(col *mgo.Collection, params HaigoParams) (*mgo.Quer
 	return col.Find(q), nil
 }
 
+// HaigoFile - YAML formatted file with MongoDB Queries.
+//
+//---
+//    - name: basic-select
+//      description: Basic MongoDB Select
+//      query: '{"type": {{.type}} }'
+//
+//    - name: conditional
+//      description: Conditional Query
+//      query: '{
+//         "type": "food",
+//         "$or": [ { "qty": { "$gt": {{.qty}} } }, { "name": {{.name}} } ]
+//      }'
 type HaigoFile struct {
 	Queries map[string]*HaigoQuery
 }
