@@ -24,9 +24,9 @@ type HaigoQuery struct {
 
 type HaigoParams map[string]interface{}
 
-func (hq *HaigoQuery) Execute(col *mgo.Collection, params HaigoParams) (*mgo.Query, error) {
+func (h *HaigoQuery) Execute(col *mgo.Collection, params HaigoParams) (*mgo.Query, error) {
 
-	q, err := hq.Query(params)
+	q, err := h.Query(params)
 	if err != nil {
 		return nil, err
 	}
