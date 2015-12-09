@@ -15,19 +15,19 @@ type param struct {
 	Type string
 }
 
-type HaigoQuery struct {
+type Query struct {
 	Name        string  `yaml:"name"`
 	Description string  `yaml:"description,omitempty"`
 	QueryString string  `yaml:"query"`
 	params      []param // TODO
 }
 
-type HaigoParams map[string]interface{}
+type Params map[string]interface{}
 
 // Execute - Returns configured mgo Query.
-func (h *HaigoQuery) Execute(col *mgo.Collection, params HaigoParams) (*mgo.Query, error) {
+func (h *Query) Query(col *mgo.Collection, params Params) (*mgo.Query, error) {
 
-	q, err := h.Query(params)
+	q, err := h.Map(params)
 	if err != nil {
 		return nil, err
 	}
@@ -48,20 +48,20 @@ func (h *HaigoQuery) Execute(col *mgo.Collection, params HaigoParams) (*mgo.Quer
 //         "type": "food",
 //         "$or": [ { "qty": { "$gt": {{.qty}} } }, { "name": {{.name}} } ]
 //      }'
-type HaigoFile struct {
-	Queries map[string]*HaigoQuery
+type File struct {
+	Queries map[string]*Query
 }
 
-func (m *HaigoFile) unmarshalYAML(data []byte) error {
+func (m *File) unmarshalYAML(data []byte) error {
 
-	var hqs []HaigoQuery
+	var hqs []Query
 
 	err := yaml.Unmarshal(data, &hqs)
 	if err != nil {
 		return err
 	}
 
-	qm := make(map[string]*HaigoQuery)
+	qm := make(map[string]*Query)
 
 	for i := range hqs {
 		qm[hqs[i].Name] = &hqs[i]
@@ -73,7 +73,7 @@ func (m *HaigoFile) unmarshalYAML(data []byte) error {
 }
 
 // sanitizeParams - Adds single quotes if param is a string (as needed by Mongo).
-func sanitizeParams(params HaigoParams) HaigoParams {
+func sanitizeParams(params Params) Params {
 	for k, v := range params {
 		switch v.(type) {
 		case string:
@@ -86,7 +86,7 @@ func sanitizeParams(params HaigoParams) HaigoParams {
 
 // Query - Accepts a params map and returns a map for use with the mgo `find()`
 // function.
-func (h *HaigoQuery) Query(params HaigoParams) (map[string]interface{}, error) {
+func (h *Query) Map(params Params) (map[string]interface{}, error) {
 
 	// Create the template
 	t, err := template.New("haigo").Parse(h.QueryString)
@@ -114,6 +114,6 @@ func (h *HaigoQuery) Query(params HaigoParams) (map[string]interface{}, error) {
 }
 
 // LoadQueryFile - Reads in Mongo Query File for use with Haigo.
-func LoadQueryFile(file string) (*HaigoFile, error) {
+func LoadQueryFile(file string) (*File, error) {
 	return parseMongoFile(file)
 }
