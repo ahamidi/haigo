@@ -41,7 +41,7 @@ func TestParseMongoFile(t *testing.T) {
 func TestGenerateQuery(t *testing.T) {
 	hf, _ := parseMongoFile("examples/queries.yml")
 
-	q, err := hf.Queries["basic-select"].Query(map[string]interface{}{
+	q, err := hf.Queries["basic-select"].Map(map[string]interface{}{
 		"type": "hi",
 	})
 
@@ -72,7 +72,7 @@ func TestExecQuery(t *testing.T) {
 	db := sess.DB(dbname)
 
 	hf, _ := parseMongoFile("examples/queries.yml")
-	q, err := hf.Queries["basic-select"].Query(map[string]interface{}{
+	q, err := hf.Queries["basic-select"].Map(map[string]interface{}{
 		"type": "Good",
 	})
 
@@ -107,7 +107,7 @@ func TestConditionalQuery(t *testing.T) {
 	db := sess.DB(dbname)
 
 	hf, _ := parseMongoFile("examples/queries.yml")
-	q, err := hf.Queries["conditional"].Query(map[string]interface{}{
+	q, err := hf.Queries["conditional"].Map(map[string]interface{}{
 		"qty":  100,
 		"name": "apple",
 	})
@@ -144,10 +144,10 @@ func TestExecute(t *testing.T) {
 	col := sess.DB(dbname).C("testcol")
 
 	hf, _ := LoadQueryFile("examples/queries.yml")
-	params := HaigoParams{
+	params := Params{
 		"type": "Good",
 	}
-	res, err := hf.Queries["basic-select"].Execute(col, params)
+	res, err := hf.Queries["basic-select"].Query(col, params)
 
 	cnt, err := res.Count()
 
