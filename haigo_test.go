@@ -46,7 +46,7 @@ func TestGenerateQuery(t *testing.T) {
 	})
 
 	assert.NoError(t, err)
-	assert.Equal(t, "hi", q["type"])
+	assert.Equal(t, "hi", q.(map[string]interface{})["type"])
 }
 
 func TestExecQuery(t *testing.T) {

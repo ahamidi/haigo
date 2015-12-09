@@ -48,7 +48,7 @@ func (h *Query) Query(col *mgo.Collection, params Params) (*mgo.Query, error) {
 
 // Accepts a params map and returns a map for use with the mgo `find()`
 // function.
-func (h *Query) Map(params Params) (map[string]interface{}, error) {
+func (h *Query) Map(params Params) (interface{}, error) {
 
 	// Create the template
 	t, err := template.New("haigo").Parse(h.QueryString)
@@ -66,7 +66,7 @@ func (h *Query) Map(params Params) (map[string]interface{}, error) {
 	}
 
 	// Unmarshal JSON into Map
-	var m map[string]interface{}
+	var m interface{}
 	err = json.Unmarshal(buf.Bytes(), &m)
 	if err != nil {
 		return nil, err
