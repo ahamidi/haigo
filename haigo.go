@@ -3,7 +3,6 @@ package haigo
 import (
 	"bytes"
 	"encoding/json"
-	"fmt"
 	"text/template"
 
 	"gopkg.in/mgo.v2"
@@ -60,7 +59,7 @@ func (h *Query) Map(params Params) (interface{}, error) {
 	buf := new(bytes.Buffer)
 
 	// Execute template
-	err = t.Execute(buf, sanitizeParams(params))
+	err = t.Execute(buf, params)
 	if err != nil {
 		return nil, err
 	}
@@ -110,18 +109,6 @@ func (m *File) unmarshalYAML(data []byte) error {
 	m.Queries = qm
 
 	return nil
-}
-
-// sanitizeParams - Adds single quotes if param is a string (as needed by Mongo).
-func sanitizeParams(params Params) Params {
-	for k, v := range params {
-		switch v.(type) {
-		case string:
-			params[k] = fmt.Sprintf("\"%s\"", v)
-		}
-
-	}
-	return params
 }
 
 // Reads in Mongo Query File for use with Haigo.
