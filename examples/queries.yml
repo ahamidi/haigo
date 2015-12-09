@@ -1,11 +1,11 @@
 ---
     - name: basic-select
       description: Basic MongoDB Select
-      query: '{"type": {{.type}} }'
+      query: '{"type": "{{.type}}" }'
 
     - name: conditional
       description: Conditional Query
       query: '{
          "type": "food",
-         "$or": [ { "qty": { "$gt": {{.qty}} } }, { "name": {{.name}} } ]
+         "$or": [ { "qty": { "$gt": "{{.qty}}" } }, { "name": "{{.name}}" } ]
       }'
