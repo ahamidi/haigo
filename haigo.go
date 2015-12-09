@@ -24,6 +24,17 @@ type Query struct {
 
 type Params map[string]interface{}
 
+// Returns configured mgo Pipe.
+func (h *Query) Pipe(col *mgo.Collection, params Params) (*mgo.Pipe, error) {
+
+	q, err := h.Map(params)
+	if err != nil {
+		return nil, err
+	}
+
+	return col.Pipe(q), nil
+}
+
 // Returns configured mgo Query.
 func (h *Query) Query(col *mgo.Collection, params Params) (*mgo.Query, error) {
 
