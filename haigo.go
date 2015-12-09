@@ -24,7 +24,7 @@ type Query struct {
 
 type Params map[string]interface{}
 
-// Execute - Returns configured mgo Query.
+// Returns configured mgo Query.
 func (h *Query) Query(col *mgo.Collection, params Params) (*mgo.Query, error) {
 
 	q, err := h.Map(params)
@@ -35,9 +35,38 @@ func (h *Query) Query(col *mgo.Collection, params Params) (*mgo.Query, error) {
 	return col.Find(q), nil
 }
 
-// HaigoFile - YAML formatted file with MongoDB Queries.
+// Accepts a params map and returns a map for use with the mgo `find()`
+// function.
+func (h *Query) Map(params Params) (map[string]interface{}, error) {
+
+	// Create the template
+	t, err := template.New("haigo").Parse(h.QueryString)
+	if err != nil {
+		return nil, err
+	}
+
+	// Buffer to capture string
+	buf := new(bytes.Buffer)
+
+	// Execute template
+	err = t.Execute(buf, sanitizeParams(params))
+	if err != nil {
+		return nil, err
+	}
+
+	// Unmarshal JSON into Map
+	var m map[string]interface{}
+	err = json.Unmarshal(buf.Bytes(), &m)
+	if err != nil {
+		return nil, err
+	}
+
+	return m, nil
+}
+
+// YAML formatted file with MongoDB Queries.
 //
-//	---
+//  ---
 //    - name: basic-select
 //      description: Basic MongoDB Select
 //      query: '{"type": {{.type}} }'
@@ -84,36 +113,7 @@ func sanitizeParams(params Params) Params {
 	return params
 }
 
-// Query - Accepts a params map and returns a map for use with the mgo `find()`
-// function.
-func (h *Query) Map(params Params) (map[string]interface{}, error) {
-
-	// Create the template
-	t, err := template.New("haigo").Parse(h.QueryString)
-	if err != nil {
-		return nil, err
-	}
-
-	// Buffer to capture string
-	buf := new(bytes.Buffer)
-
-	// Execute template
-	err = t.Execute(buf, sanitizeParams(params))
-	if err != nil {
-		return nil, err
-	}
-
-	// Unmarshal JSON into Map
-	var m map[string]interface{}
-	err = json.Unmarshal(buf.Bytes(), &m)
-	if err != nil {
-		return nil, err
-	}
-
-	return m, nil
-}
-
-// LoadQueryFile - Reads in Mongo Query File for use with Haigo.
+// Reads in Mongo Query File for use with Haigo.
 func LoadQueryFile(file string) (*File, error) {
 	return parseMongoFile(file)
 }
