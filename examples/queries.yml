@@ -7,5 +7,5 @@
       description: Conditional Query
       query: '{
          "type": "food",
-         "$or": [ { "qty": { "$gt": "{{.qty}}" } }, { "name": "{{.name}}" } ]
+         "$or": [ { "qty": { "$gt": {{.qty}} } }, { "name": "{{.name}}" } ]
       }'
