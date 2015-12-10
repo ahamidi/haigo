@@ -156,6 +156,43 @@ func TestExecute(t *testing.T) {
 
 }
 
+func TestPrint(t *testing.T) {
+	hf, _ := parseMongoFile("examples/queries.yml")
+	err := hf.Queries["conditional"].Print(map[string]interface{}{
+		"qty":  100,
+		"name": "apple",
+	})
+
+	assert.NoError(t, err)
+}
+
+func TestString(t *testing.T) {
+	hf, _ := parseMongoFile("examples/queries.yml")
+	q, err := hf.Queries["conditional"].String(map[string]interface{}{
+		"qty":  100,
+		"name": "apple",
+	})
+
+	assert.NoError(t, err)
+	assert.IsType(t, "hello", q)
+}
+
+func TestMissingMongoFile(t *testing.T) {
+	_, err := parseMongoFile("examples/querie.yml")
+
+	assert.Error(t, err)
+}
+
+func TestMissingQuery(t *testing.T) {
+	hf, _ := parseMongoFile("examples/queries.yml")
+	_, err := hf.Queries["missing"].String(map[string]interface{}{
+		"qty":  100,
+		"name": "apple",
+	})
+
+	assert.Error(t, err)
+}
+
 func readSeedFile(file string) ([]interface{}, error) {
 
 	ms := []interface{}{}

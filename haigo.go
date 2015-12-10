@@ -3,6 +3,8 @@ package haigo
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
+	"fmt"
 	"text/template"
 
 	"gopkg.in/mgo.v2"
@@ -72,6 +74,30 @@ func (h *Query) Map(params Params) (interface{}, error) {
 	}
 
 	return m, nil
+}
+
+// Pretty prints the configured query.
+func (h *Query) Print(params Params) error {
+	m, err := h.Map(params)
+	if err != nil {
+		return err
+	}
+
+	jsonM, err := json.MarshalIndent(m, "", "  ")
+	if err != nil {
+		return err
+	}
+
+	fmt.Printf("Name: %s\nDescription: %s\nQuery:\n%s\n", h.Name, h.Description, string(jsonM))
+	return nil
+}
+
+// Return configured query as a string.
+func (h *Query) String(params Params) (string, error) {
+	if h == nil {
+		return "", errors.New("Query Not Found.")
+	}
+	return h.QueryString, nil
 }
 
 // YAML formatted file with MongoDB Queries.
