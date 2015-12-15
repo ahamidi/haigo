@@ -193,6 +193,14 @@ func TestMissingQuery(t *testing.T) {
 	assert.Error(t, err)
 }
 
+// Here is an example of Haigo's basic usage.
+//
+// In this case we're loading the "basic-select" query from the
+// "examples/queries.yml" MongoDB query file and then executing it against the
+// "mycol" collection on "mydb".
+//
+// "Query" simply returns a mgo.Query struct and as such supports all of the
+// expected methods (in this case we're calling Count().
 func Example() {
 
 	// Dial MongoDB Server
