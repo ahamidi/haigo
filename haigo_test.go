@@ -193,6 +193,26 @@ func TestMissingQuery(t *testing.T) {
 	assert.Error(t, err)
 }
 
+func Example() {
+
+	// Dial MongoDB Server
+	sess, _ := mgo.Dial("127.0.0.1")
+	col := sess.DB("mydb").C("mycol")
+
+	// Load MongoDB Query File
+	hf, _ := LoadQueryFile("examples/queries.yml")
+	params := Params{
+		"type": "Good",
+	}
+
+	// Call "basic-select" query.
+	res, _ := hf.Queries["basic-select"].Query(col, params)
+
+	cnt, _ := res.Count()
+
+	fmt.Println(cnt)
+}
+
 func readSeedFile(file string) ([]interface{}, error) {
 
 	ms := []interface{}{}
