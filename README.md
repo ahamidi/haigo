@@ -19,17 +19,17 @@ With Haigo, you can use the JSON formatted Mongo queries directly.
 
 1. Connect to Mongo (as you would normally)
 
-1. Load Query File:
-    ```hf, err := haigo.LoadQueryFile("queries.yml")```
+1. Load Query File: _SEE [examples/queries.yml](/examples/queries.yml) for example query files._  
+        ```hf, err := haigo.LoadQueryFile("queries.yml")```
 
-1. Configure Haigo Params:
-    ```params := haigo.Params{"name": "Ali", "age": 32}```
+1. Configure Haigo Params:  
+        ```params := haigo.Params{"name": "Ali", "age": 32}```
 
-1. Execute Query/Pipe:
-    ```q, err := hf.Queries["FindUser"].Pipe(col, params)```
+1. Execute Query/Pipe:  
+        ```q, err := hf.Queries["FindUser"].Pipe(col, params)```
 
-1. Handle result (as you would normally):
-    ```q.Count()```
+1. Handle result (as you would normally):  
+        ```q.Count()```
 
 ### TODO
 - [x] Parse MongoDB Query YAML
